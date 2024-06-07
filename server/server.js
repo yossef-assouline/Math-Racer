@@ -11,15 +11,18 @@ io.on('connection', (socket) => {
 
   socket.on('create_room', () => {
     const roomId = `room-${socket.id}`;
-    rooms[roomId] = { players: [socket.id], raceResults: [] };
+    rooms[roomId] = { players: [socket.id], raceResults: [] , gameInProgress: false};
     socket.join(roomId);
     console.log(`Room created: ${roomId}`);
     socket.emit('room_created', roomId);
     console.log(`Player ${socket.id} joined room: ${roomId} players : ${rooms[roomId].players}`);
   });
-
   socket.on('join_room', (roomId) => {
     if (rooms[roomId]) {
+      if (rooms[roomId].gameInProgress) {
+        socket.emit('game_in_progress', 'Room is already in game');
+        return;
+      }
       rooms[roomId].players.push(socket.id);
       socket.join(roomId);
       console.log(`Player ${socket.id} joined room: ${roomId} ${rooms[roomId].players}`);
@@ -31,6 +34,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('start_game', (roomId) => {
+    rooms[roomId].gameInProgress = true;
     console.log(`Game started in room: ${roomId}`);
     io.to(roomId).emit('game_started');
   });
@@ -44,11 +48,14 @@ io.on('connection', (socket) => {
     if (rooms[roomId]) {
       rooms[roomId].raceResults.push(socket.id);
       console.log(`Player ${socket.id} finished race in room ${roomId}`);
-      io.to(roomId).emit('update_leaderboard', rooms[roomId].raceResults);
+      io.to(roomId).emit('update_Race_Results', rooms[roomId].raceResults);
     }
   });
   socket.on('restart_game', (roomId) => {
-    io.to(roomId).emit('restart_game');
+     if (rooms[roomId]) {
+      rooms[roomId].gameInProgress = false;
+      io.to(roomId).emit('restart_game');
+    }
   });
   socket.on('disconnect', () => {
     console.log(`Player ${socket.id} disconnected`);

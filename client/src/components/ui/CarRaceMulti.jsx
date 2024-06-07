@@ -10,8 +10,6 @@ import ExerciseForm from "../ui/ExerciseForm"
 
 export function CarRaceMulti() {
   const {
-    resetPlayersProgress,
-    removePlayerProgress,
     timeLeft,
     setTimeLeft,
     raceResults,
@@ -66,14 +64,13 @@ export function CarRaceMulti() {
     setRaceResults:state.setRaceResults,
     timeLeft:state.timeLeft,
     setTimeLeft:state.setTimeLeft,
-    removePlayerProgress:state.removePlayerProgress,
-    resetPlayersProgress:state.resetPlayersProgress
   }));
-
+  
   const [playersProgress, setPlayersProgress] = useState({});
   const inputRef = useRef();
   const correctAnswers = useRef(0);
   const finished = useRef(false);
+  const [errMessage,setErrMessage] = useState()
 
   useEffect(() => {
     if (startCountdown) {
@@ -146,6 +143,7 @@ export function CarRaceMulti() {
     addExercises(newExercises);
     // setExercises(newExercises);
     correctAnswers.current = 0;
+
   };
 
   const handleProgress = () => {
@@ -168,6 +166,7 @@ export function CarRaceMulti() {
   };
 
   const checkAnswer = (e) => {
+    console.log(exercises)
     e.preventDefault();
     inputRef.current.focus();
 
@@ -263,7 +262,7 @@ export function CarRaceMulti() {
     });
 
 
-    socketIo.on("update_leaderboard", (raceResults) => {
+    socketIo.on("update_Race_Results", (raceResults) => {
       setRaceResults(raceResults);
     });
 
@@ -274,7 +273,9 @@ export function CarRaceMulti() {
         return newProgress;
       });
     });
-    
+    socketIo.on("game_in_progress", (message) => {
+      setErrMessage(message)
+    });
     // Listen for the restart_game event
     socketIo.on("restart_game", () => {
       resetGameState();
@@ -298,7 +299,7 @@ export function CarRaceMulti() {
               >
                 Play again ?
               </button>
-              <h2 className="text-3xl text-white mt-4">Leaderboard</h2>
+              <h2 className="text-3xl text-white mt-4">Race Results</h2>
               <ol className="text-2xl text-white">
                 {raceResults.map((playerId, index) => (
                   <li key={playerId}>{`${index + 1} : Player ${playerId}`}</li>
@@ -321,25 +322,27 @@ export function CarRaceMulti() {
                 >
                   Start Game
                 </button>
-                <div className="mt-8">
+                <div className="mt-8 flex flex-col items-center">
                   <input
                     type="text"
                     placeholder="Enter Room ID"
                     onChange={(e) => setRoomId(e.target.value)}
                     className="p-1 rounded-md text-lg w-48 outline-none border-none text-black"
                   />
+                  {errMessage ? <h1 className="text-red-500">{errMessage}</h1> : ""}
                   <button
                     onClick={() => socket.emit("join_room", roomId)}
-                    className="ml-2 text-lg font-medium text-white bg-yellow-400 hover:bg-yellow-500 rounded-md p-1"
+                    className="ml-2 text-lg font-medium text-white bg-cyan-950 hover:bg-cyan-800 rounded-md p-1 mt-4"
                   >
                     Join Room
                   </button>
                   <button
                     onClick={() => socket.emit("create_room")}
-                    className="ml-2 text-lg font-medium text-white bg-green-400 hover:bg-green-500 rounded-md p-1"
+                    className="ml-2 text-lg font-medium text-white bg-green-400 hover:bg-green-500 rounded-md p-1 mt-4"
                   >
                     Create Room
                   </button>
+                  
                 </div>
               </>
             ) : (
