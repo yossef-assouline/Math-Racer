@@ -11,7 +11,7 @@ io.on('connection', (socket) => {
 
   socket.on('create_room', () => {
     const roomId = `room-${socket.id}`;
-    rooms[roomId] = { players: [socket.id], leaderboard: [] };
+    rooms[roomId] = { players: [socket.id], raceResults: [] };
     socket.join(roomId);
     console.log(`Room created: ${roomId}`);
     socket.emit('room_created', roomId);
@@ -42,9 +42,9 @@ io.on('connection', (socket) => {
 
   socket.on('finish_race', (roomId) => {
     if (rooms[roomId]) {
-      rooms[roomId].leaderboard.push(socket.id);
+      rooms[roomId].raceResults.push(socket.id);
       console.log(`Player ${socket.id} finished race in room ${roomId}`);
-      io.to(roomId).emit('update_leaderboard', rooms[roomId].leaderboard);
+      io.to(roomId).emit('update_leaderboard', rooms[roomId].raceResults);
     }
   });
   socket.on('restart_game', (roomId) => {
