@@ -8,7 +8,6 @@ import { Hero } from "../components/ui/Hero";
 import { Footer } from "../components/ui/Footer";
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [loading , setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
  
   return (

@@ -4,23 +4,9 @@ import Image from "next/image";
 import io from "socket.io-client";
 import { getRandomInt } from "../../lib/utils";
 import {exercisesStore,} from "../../state/store";
-const cars = [
-  {
-    img: "/car.png",
-  },
-  {
-    img: "/car1.png",
-  },
-  {
-    img: "/car2.png",
-  },
-  {
-    img: "/car3.png",
-  },
-  {
-    img: "/car4.png",
-  },
-];
+import RaceProgress from "../ui/RaceProgress"
+import CountDown from "../ui/CountDown"
+import ExerciseForm from "../ui/ExerciseForm"
 
 export function CarRaceMulti() {
   const {
@@ -34,7 +20,6 @@ export function CarRaceMulti() {
     setSocketId,
     setSocket,
     socket,
-    
     roomId,
     setRoomId,
     startCountdown,
@@ -323,76 +308,9 @@ export function CarRaceMulti() {
           </>
         ) : (
           <>
-            {startCountdown && (
-              <h1 className="text-3xl text-white">
-                {count > 0 ? count : "Go!"}
-              </h1>
-            )}
-            {startCountdown && count === 0 && (
-              <div className="mt-4">
-                <p className="text-5xl font-medium text-white">{timeLeft}</p>
-              </div>
-            )}
-            {Object.keys(playersProgress).map((id, i) => (
-              <div
-                key={id}
-                className="border-t-2 border-white w-10/12 mt-24 justify-start relative"
-              >
-                <Image
-                  className={`relative bottom-11 transition-transform duration-500`}
-                  style={{
-                    left:
-                      playersProgress[id] === 0
-                        ? 0
-                        : `calc(${playersProgress[id] * 10}% - ${
-                            playersProgress[id] >= 10
-                              ? "60px"
-                              : playersProgress[id] >= 5
-                              ? "30px"
-                              : "0px"
-                          })`,
-                  }}
-                  src={cars[i].img}
-                  alt="img"
-                  width={60}
-                  height={60}
-                ></Image>
-              </div>
-            ))}
-            <form onSubmit={checkAnswer} className="flex flex-col items-center">
-              {renderUi && (
-                <div className="bg-blue-800/10 border-4 text-center p-8 shadow-2xl rounded-2xl mb-8">
-                  <div className="flex flex-col items-center mt-1 2">
-                    <h1 className="text-5xl text-white font-bold">
-                      {exercises[currentIndex].exercise}
-                    </h1>
-                    <span className="text-white text-3xl">=</span>
-
-                    {!isHide ? (
-                      <label
-                        htmlFor=""
-                        className={`text-xl font-bold ${
-                          correctAnswer ? "text-green-400" : "text-red-400"
-                        }`}
-                      >
-                        {correctAnswer ? "Correct answer" : "Wrong answer"}
-                      </label>
-                    ) : (
-                      ""
-                    )}
-
-                    <input
-                      type="number"
-                      ref={inputRef}
-                      className="border border-black w-2/3 h-12 mt-4 text-center text-xl"
-                    />
-                    <button className="gap-2 font-semibold text-lg text-black border-lg  rounded-md bg-gradient-to-r from-amber-200 to-yellow-300 pl-3 pr-3 pt-1 pb-1 mt-8 hover:outline-none hover:ring-2 hover:ring-black ring-offset">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              )}
-            </form>
+            <CountDown startCountdown={startCountdown} count={count} timeLeft={timeLeft} />
+            <RaceProgress playersProgress={playersProgress} />
+            <ExerciseForm renderUi={renderUi} exercises={exercises} currentIndex={currentIndex} checkAnswer={checkAnswer} inputRef={inputRef} correctAnswer={correctAnswer} isHide={isHide} />
             {!renderUi ? (
               <>
                 <button
@@ -441,7 +359,8 @@ export function CarRaceMulti() {
           </>
         )}
       </div>
-      <div className="mt-8">
+      {!raceFinished && (
+        <div className="mt-8">
         <h1 className="text-center">Race Results</h1>
         <ol>
           {raceResults.map((player, i) => {
@@ -449,6 +368,8 @@ export function CarRaceMulti() {
           })}
         </ol>
       </div>
+      )}
+      
     </div>
   );
 }

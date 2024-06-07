@@ -1,14 +1,7 @@
 import React from "react";
-import { exercisesStore } from "../../state/store";
-export default function ExerciseForm({ renderUi, currentIndex, checkAnswer, inputRef, correctAnswer, isHide }) {
-    const {
-        exercises,
-      } = exercisesStore((state) => ({
-        exercises: state.exercises,
-      }));
-    
-    return(
-        <form onSubmit={checkAnswer} className="flex flex-col items-center">
+
+const ExerciseForm = ({ renderUi, exercises, currentIndex, checkAnswer, inputRef, correctAnswer, isHide }) => (
+  <form onSubmit={checkAnswer} className="flex flex-col items-center">
     {renderUi && (
       <div className="bg-blue-800/10 border-4 text-center p-8 shadow-2xl rounded-2xl mb-8">
         <div className="flex flex-col items-center mt-1 2">
@@ -42,14 +35,6 @@ export default function ExerciseForm({ renderUi, currentIndex, checkAnswer, inpu
       </div>
     )}
   </form>
-    )
-    
-  
+);
 
-
-}
-
-
-
-    
- 
+export default ExerciseForm;

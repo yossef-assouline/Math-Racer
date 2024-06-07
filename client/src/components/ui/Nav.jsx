@@ -11,6 +11,7 @@ export function Nav() {
   const [loading , setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
+  
   useEffect(() => {
     const fetchData = async () => {
       const session = await getSession();
@@ -24,6 +25,7 @@ export function Nav() {
     };
     fetchData();
   }, []);
+  
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
   };
