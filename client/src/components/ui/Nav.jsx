@@ -7,28 +7,28 @@ import { getSession , signOut} from 'next-auth/react';
 import { useState , useEffect } from "react";
 
 export function Nav() {
-  const [user, setUser] = useState(null);
-  const [loading , setLoading] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [user, setUser] = useState(null);
+  // const [loading , setLoading] = useState(false)
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   
-  useEffect(() => {
-    const fetchData = async () => {
-      const session = await getSession();
-      if (session) {
-        setUser(session.user);
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const session = await getSession();
+  //     if (session) {
+  //       setUser(session.user);
+  //       setIsLoggedIn(true);
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, []);
   
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: '/' });
-  };
+  // const handleLogout = async () => {
+  //   await signOut({ callbackUrl: '/' });
+  // };
   
   return (
     <>
@@ -46,7 +46,7 @@ export function Nav() {
             {pathname.includes("/play") ? "Home" : ""}
           </Link>
         </div>
-        <div className="gap-x-5 flex mr-5 items-center">
+        {/* <div className="gap-x-5 flex mr-5 items-center">
           
           {isLoggedIn ? (
             
@@ -64,7 +64,7 @@ export function Nav() {
               Login
             </Link>
           )}
-        </div>
+        </div> */}
       </div>
       <hr className="border-black" />
     </>
