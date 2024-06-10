@@ -73,6 +73,7 @@ export function CarRaceMulti() {
   const [errMessage,setErrMessage] = useState()
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (startCountdown) {
       const timer = setInterval(() => {
         if (count > 0) {
@@ -87,6 +88,7 @@ export function CarRaceMulti() {
   }, [startCountdown, count]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (renderUi && timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft(timeLeft - 1);
@@ -211,6 +213,7 @@ export function CarRaceMulti() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     // connecting socketIo to server
     const socketIo = io("http://localhost:3001");
     setSocket(socketIo);
