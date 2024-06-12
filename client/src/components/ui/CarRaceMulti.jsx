@@ -215,7 +215,7 @@ export function CarRaceMulti() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // connecting socketIo to server
-    const socketIo = io("http://localhost:3001");
+    const socketIo = io("https://math-racer-server.onrender.com");
     setSocket(socketIo);
 
     socketIo.on("connect", () => {
@@ -370,7 +370,7 @@ export function CarRaceMulti() {
         <h1 className="text-center">Race Results</h1>
         <ol>
           {raceResults.map((player, i) => {
-            return <li>{`${i + 1} : Player ${player}`}</li>;
+            return <li key={player} >{`${i + 1} : Player ${player}`}</li>;
           })}
         </ol>
       </div>

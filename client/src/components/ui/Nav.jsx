@@ -34,7 +34,7 @@ export function Nav() {
     <>
       <div className="w-full min-h-20 flex items-center justify-between bg-cyan-950 text-white ">
         <div className="flex items-center gap-x-5 flex ml-5">
-          <Image src="/logo.png"  width={100} height={100}></Image>
+          <Image src="/logo.png"  width={100} height={100} alt="logo"></Image>
           <Link
             className="gap-2 font-semibold text-xl"
             href={
