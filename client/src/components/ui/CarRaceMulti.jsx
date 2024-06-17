@@ -10,6 +10,7 @@ import ExerciseForm from "../ui/ExerciseForm"
 
 export function CarRaceMulti() {
   const {
+    resetIndex,
     timeLeft,
     setTimeLeft,
     raceResults,
@@ -37,6 +38,7 @@ export function CarRaceMulti() {
     setCorrectAnswer,
     setRenderUi,
   } = exercisesStore((state) => ({
+    resetIndex:state.resetIndex,
     exercises: state.exercises,
     addExercises: state.addExercises,
     currentIndex: state.currentIndex,
@@ -168,7 +170,7 @@ export function CarRaceMulti() {
   };
 
   const checkAnswer = (e) => {
-    console.log(exercises)
+    console.log(exercises , currentIndex)
     e.preventDefault();
     inputRef.current.focus();
 
@@ -199,7 +201,7 @@ export function CarRaceMulti() {
     setRoomId("");
     setPlayersProgress({})
     addExercises([]);
-    incIndex(0);
+    resetIndex(0)
     setStartCountdown(false);
     setRaceResults([]);
     setTimeLeft(60); // Reset the timer
@@ -252,7 +254,7 @@ export function CarRaceMulti() {
           acc[playerId] = correctAnswers
           return acc;
         }, {});
-        console.log(newPlayersProgress)
+
         setPlayersProgress(newPlayersProgress);
       }
     });

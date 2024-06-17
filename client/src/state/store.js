@@ -15,6 +15,7 @@ export const exercisesStore = create((set) => ({
         set((state) => ({
           currentIndex : state.currentIndex + 1
     })),
+    resetIndex: (value) => set({currentIndex:value}),
     
     renderUi:false,
     setRenderUi: (value) => set({ renderUi: value }),
