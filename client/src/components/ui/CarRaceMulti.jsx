@@ -170,7 +170,7 @@ export function CarRaceMulti() {
   };
 
   const checkAnswer = (e) => {
-    console.log(exercises , currentIndex)
+    console.log(exercises)
     e.preventDefault();
     inputRef.current.focus();
 
@@ -285,8 +285,9 @@ export function CarRaceMulti() {
     socketIo.on("restart_game", () => {
       resetGameState();
     });
-
+    resetGameState()
     return () => socketIo.disconnect();
+    
   }, []);
 
   return (
